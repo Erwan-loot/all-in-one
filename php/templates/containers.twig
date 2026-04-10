@@ -585,11 +585,11 @@
                                 {% if isAnyRunning == true %}
                                     <h2>Docker System Prune</h2>
                                     <details>
-                                        <summary>Click here to reveal a button to trigger docker system prune on your docker daemon host. This will remove unused images, containers and volumes.</summary>
+                                        <summary>Click here to reveal a button to trigger "docker system prune -a" on your docker daemon host. This will remove unused images, containers, networks, volumes and build cache.</summary>
                                         <form method="POST" action="api/docker/prune" target="overlay-log">
                                             <input type="hidden" name="{{csrf.keys.name}}" value="{{csrf.name}}">
                                             <input type="hidden" name="{{csrf.keys.value}}" value="{{csrf.value}}">
-                                            <input type="submit" value="Run docker system prune" onclick="return confirm('Run docker system prune? This will remove unused images, containers and volumes. Continue?')" />
+                                            <input type="submit" value="Run docker system prune" onclick="return confirm('Run docker system prune -a? This will remove unused images, containers, networks, volumes and build cache. Continue?')" />
                                         </form>
                                     </details>
                                 {% endif %}
