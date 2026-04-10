@@ -1014,7 +1014,10 @@ readonly class DockerActionManager {
             try {
                 $response = $this->guzzleClient->post($url);
                 if ($addToStreamingResponseBody !== null) {
-                    $addToStreamingResponseBody((string)$response->getBody());
+                    // Re-format the json and make it pretty for better UX
+                    $prettyJson = (string)json_encode(json_decode((string)$response->getBody()), JSON_PRETTY_PRINT);
+                    // Wrap the json in a pre html tag so that the formatting is kept
+                    $addToStreamingResponseBody("<pre>" . $prettyJson . "</pre>");
                 }
             } catch (RequestException $e) {
                 error_log(sprintf('Docker prune (%s) failed: %s', $endpoint, $e->getMessage()));
@@ -1027,6 +1030,14 @@ readonly class DockerActionManager {
 
         if ($addToStreamingResponseBody !== null) {
             $addToStreamingResponseBody("Docker system prune completed.");
+            sleep(1);
+
+            // We automatically reload after 10s so that the output can be read or copied if necessary
+            $addToStreamingResponseBody("Automatically reloading the page after 10s.");
+            for ($seconds = 10; $seconds >= 1; $seconds--) {
+                sleep(1);
+                $addToStreamingResponseBody((string)$seconds);
+            }
         }
     }
 }
